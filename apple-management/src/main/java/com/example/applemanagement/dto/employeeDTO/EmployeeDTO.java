@@ -1,6 +1,5 @@
 package com.example.applemanagement.dto.employeeDTO;
 
-import com.example.applemanagement.model.employee.Employee;
 import com.example.applemanagement.model.employee.Position;
 
 import javax.persistence.*;
@@ -45,10 +44,6 @@ public class EmployeeDTO {
         this.address = address;
         this.imgUrl = imgUrl;
         this.position = position;
-    }
-
-    public EmployeeDTO(Employee employee) {
-
     }
 
     public Long getId() {
