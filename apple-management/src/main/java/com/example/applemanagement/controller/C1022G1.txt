@@ -1,1 +1,8 @@
 Case_study_Module4
+ @GetMapping("")
+    public Page<Product> findAllProduct(
+    @PageableDefault(size = 4,sort = "id", direction = Sort.Direction.DESC)Pageable pageable,
+                                        @RequestParam(required = false, defaultValue = "") String search){
+        Page<Product> products = productService.listAllProduct(search,pageable);
+        List<Product> products1 = products.toList();
+        return new PageImpl<>(products1, pageable, products.getTotalElements());
