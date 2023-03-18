@@ -45,7 +45,6 @@ public class EmployeeDTO {
         this.imgUrl = imgUrl;
         this.position = position;
     }
-
     public Long getId() {
         return id;
     }
