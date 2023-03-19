@@ -1,5 +1,6 @@
 package com.example.applemanagement.service.store;
 
+import com.example.applemanagement.dto.storeDTO.StoreCreateAndUpdateDTO;
 import com.example.applemanagement.dto.storeDTO.StoreDTO;
 import com.example.applemanagement.model.store.Store;
 import org.springframework.data.domain.Page;
@@ -11,4 +12,6 @@ public interface IStoreService {
     Store findById(int id);
 
     void delete(int id);
+    void create(StoreCreateAndUpdateDTO storeCreateAndUpdateDTO);
+    void update(StoreCreateAndUpdateDTO storeCreateAndUpdateDTO, int id);
 }
