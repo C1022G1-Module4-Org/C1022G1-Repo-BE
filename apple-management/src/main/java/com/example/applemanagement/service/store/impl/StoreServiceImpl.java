@@ -1,9 +1,12 @@
 package com.example.applemanagement.service.store.impl;
 
+import com.example.applemanagement.dto.storeDTO.StoreCreateAndUpdateDTO;
 import com.example.applemanagement.dto.storeDTO.StoreDTO;
 import com.example.applemanagement.dto.storeDTO.StoreTypeDTO;
 import com.example.applemanagement.model.store.Store;
+import com.example.applemanagement.model.store.StoreType;
 import com.example.applemanagement.repository.store.IStoreRepository;
+import com.example.applemanagement.repository.store.IStoreTypeRepository;
 import com.example.applemanagement.service.store.IStoreService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +23,9 @@ import java.util.List;
 public class StoreServiceImpl implements IStoreService {
     @Autowired
     private IStoreRepository iStoreRepository;
+
+    @Autowired
+    private IStoreTypeRepository iStoreTypeRepository;
 
     @Override
     public Page<StoreDTO> listAll(Pageable pageable, String name) {
@@ -45,6 +51,23 @@ public class StoreServiceImpl implements IStoreService {
     public void delete(int id) {
         Store store = findById(id);
         store.setDelete(true);
+        iStoreRepository.save(store);
+    }
+
+    @Override
+    public void create(StoreCreateAndUpdateDTO storeCreateAndUpdateDTO) {
+        Store store = new Store();
+        store.setStoreType(iStoreTypeRepository.findById(storeCreateAndUpdateDTO.getStoreTypeDTO().getIdType()).get());
+        BeanUtils.copyProperties(storeCreateAndUpdateDTO, store);
+        iStoreRepository.save(store);
+    }
+
+    @Override
+    public void update(StoreCreateAndUpdateDTO storeCreateAndUpdateDTO, int id) {
+        Store store = iStoreRepository.findById(id).get();
+        store.setStoreType(new StoreType());
+        BeanUtils.copyProperties(storeCreateAndUpdateDTO.getStoreTypeDTO(), store.getStoreType());
+        BeanUtils.copyProperties(storeCreateAndUpdateDTO, store);
         iStoreRepository.save(store);
     }
 }
