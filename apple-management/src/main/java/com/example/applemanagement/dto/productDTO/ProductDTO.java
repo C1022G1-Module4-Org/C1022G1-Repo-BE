@@ -16,21 +16,21 @@ public class ProductDTO {
     private String img;
     private String price;
     private String quantity;
-    private String describe;
+    private String describeProduct;
 
     private MadeIn madeIn;
 
     public ProductDTO() {
     }
 
-    public ProductDTO(Integer id, String name, String dateSize, String img, String price, String quantity, String describe, MadeIn madeIn) {
+    public ProductDTO(Integer id, String name, String dateSize, String img, String price, String quantity, String describeProduct, MadeIn madeIn) {
         this.id = id;
         this.name = name;
         this.dateSize = dateSize;
         this.img = img;
         this.price = price;
         this.quantity = quantity;
-        this.describe = describe;
+        this.describeProduct = describeProduct;
         this.madeIn = madeIn;
     }
 
@@ -82,12 +82,12 @@ public class ProductDTO {
         this.quantity = quantity;
     }
 
-    public String getDescribe() {
-        return describe;
+    public String getDescribeProduct() {
+        return describeProduct;
     }
 
-    public void setDescribe(String describe) {
-        this.describe = describe;
+    public void setDescribeProduct(String describeProduct) {
+        this.describeProduct = describeProduct;
     }
 
     public MadeIn getMadeIn() {
