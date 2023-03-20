@@ -1,4 +1,4 @@
-package com.example.applemanagement.repository;
+package com.example.applemanagement.repository.employee;
 
 import com.example.applemanagement.model.employee.Position;
 import org.springframework.data.jpa.repository.JpaRepository;

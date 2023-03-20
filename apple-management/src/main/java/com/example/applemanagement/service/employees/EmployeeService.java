@@ -1,7 +1,7 @@
 package com.example.applemanagement.service.employees;
 import com.example.applemanagement.dto.employeeDTO.EmployeeDTO;
 import com.example.applemanagement.model.employee.Employee;
-import com.example.applemanagement.repository.IEmployeeRepository;
+import com.example.applemanagement.repository.employee.IEmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

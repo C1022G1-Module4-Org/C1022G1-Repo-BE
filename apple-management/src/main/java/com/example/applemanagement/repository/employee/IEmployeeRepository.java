@@ -1,4 +1,4 @@
-package com.example.applemanagement.repository;
+package com.example.applemanagement.repository.employee;
 
 import com.example.applemanagement.dto.employeeDTO.EmployeeDTO;
 import com.example.applemanagement.model.employee.Employee;
