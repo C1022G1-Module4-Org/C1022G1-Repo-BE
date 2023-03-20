@@ -8,4 +8,12 @@ import java.util.List;
 
 public interface IProductService {
     Page<Product> listAllProduct(String search, Pageable pageable);
+
+    Product findProductById(int id);
+
+    Product createNewProduct(Product product);
+
+    void deleteProduct(Product product);
+
+    Product updateProduct(int id, Product product);
 }
