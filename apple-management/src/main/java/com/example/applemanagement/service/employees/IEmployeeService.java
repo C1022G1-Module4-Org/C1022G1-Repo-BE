@@ -16,4 +16,14 @@ public interface IEmployeeService {
     void deleteEmployee(Integer id);
 
     void editEmployee(Employee employee);
+
+    void update(EmployeeCreateAndUpdateDTO employeeCreateAndUpdateDTO, int id);
+
+    void create(EmployeeCreateAndUpdateDTO employeeCreateAndUpdateDTO);
+
+    void findById(int id);
+
+    Page<EmployeeDTO> listAll(Pageable pageable1, String name);
+
+    void delete(int id);
 }
