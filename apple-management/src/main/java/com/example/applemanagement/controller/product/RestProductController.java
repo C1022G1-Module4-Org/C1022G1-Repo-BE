@@ -27,7 +27,7 @@ public class RestProductController {
     private IMadeInService madeInService;
 
     @GetMapping("")
-    public Page<Product> findAllProduct(@PageableDefault(size = 4,sort = "id", direction = Sort.Direction.DESC)Pageable pageable,
+    public Page<Product> findAllProduct(@PageableDefault(size = 3,sort = "id", direction = Sort.Direction.DESC)Pageable pageable,
                                         @RequestParam(required = false, defaultValue = "") String search){
         Page<Product> products = productService.listAllProduct(search,pageable);
         List<Product> products1 = products.toList();

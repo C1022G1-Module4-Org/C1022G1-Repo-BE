@@ -1,53 +1,72 @@
 package com.example.applemanagement.controller.employee;
 
 import com.example.applemanagement.dto.employeeDTO.EmployeeDTO;
-import com.example.applemanagement.dto.employeeDTO.PositionDTO;
 import com.example.applemanagement.model.employee.Employee;
+import com.example.applemanagement.model.employee.Position;
 import com.example.applemanagement.service.employees.IEmployeeService;
+import com.example.applemanagement.service.employees.position.IPositionService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
+import java.util.List;
 
 @RestController
+@RequestMapping("/apple/employee")
 @CrossOrigin("*")
 public class RestEmployeeController {
     @Autowired
     IEmployeeService employeeService;
 
+    @Autowired
+    IPositionService  positionService;
+
     @GetMapping("/list-employee")
-    public ResponseEntity<Page<EmployeeDTO>> findAllEmployee(
-            @RequestParam(required = false, defaultValue = "") String nameSearch,
-            @RequestParam(required = false, defaultValue = "5") Integer size) {
-        Pageable pageable = PageRequest.of(0, size);
-        Page<EmployeeDTO> employeeDTOS = employeeService.findAllByName(nameSearch, pageable);
-        if (employeeDTOS.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-        return new ResponseEntity<>(employeeDTOS, HttpStatus.OK);
+    public Page<Employee> findAllEmployee(
+            @PageableDefault(size = 2,sort = "id", direction = Sort.Direction.DESC)Pageable pageable,
+            @RequestParam(required = false, defaultValue = "") String search) {
+        Page<Employee> employee = employeeService.findAllEmployee(search, pageable);
+        List<Employee> employees = employee.toList();
+        return new PageImpl<>(employees, pageable,employee.getTotalElements());
+    }
+
+//    @ResponseStatus(HttpStatus.OK)
+//    @GetMapping("")
+//    public Page<Employee> EmployeeDTOPage(
+//            @Valid
+//            @PageableDefault(size = 3) Pageable pageable,
+//            @RequestParam(required = false, defaultValue = "") String name) {
+//        Pageable pageable1 = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize());
+//        return employeeService.findAllEmployee(name,pageable1);
+//    }
+    @GetMapping("/position")
+    public List<Position> findAllPosition(){
+        return positionService.findAll();
+    }
+
+    @PostMapping("")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Employee createNewEmployee(@RequestBody EmployeeDTO employeeDTO){
+        Employee employee = new Employee();
+        BeanUtils.copyProperties(employeeDTO,employee);
+        return employeeService.createNewEmployee(employee);
+    }
+    @ResponseStatus(HttpStatus.OK)
+    @DeleteMapping("/{id}")
+    public void deleteEmployee(@PathVariable long id) {
+        Employee employee = this.employeeService.findEmployeeById(id);
+        employeeService.deleteEmployee(employee);
     }
 
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping("")
-    public Page<EmployeeDTO> EmployeeDTOPage(
-            @Valid
-            @PageableDefault(size = 3) Pageable pageable,
-            @RequestParam(required = false, defaultValue = "") String name) {
-        Pageable pageable1 = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize());
-        return employeeService.listAll(pageable1, name);
-    }
-
-    @ResponseStatus(HttpStatus.OK)
-    @DeleteMapping("/delete/{id}")
-    public void deleteEmployee(@PathVariable int id) {
-        employeeService.delete(id);
+    @PutMapping("/{id}")
+    public Employee updateEmployee(@PathVariable int id, @RequestBody EmployeeDTO employeeDTO){
+        Employee employee = new Employee();
+        BeanUtils.copyProperties(employeeDTO,employee);
+        return employeeService.updateEmployee(id,employee);
     }
 }
 
