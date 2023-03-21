@@ -28,6 +28,16 @@ public class Customer {
     public Customer() {
     }
 
+    public Customer(String customer, String dateOfBirth, String address, String idCard, String phoneNumber, String img, CustomerType customerType) {
+        this.customer = customer;
+        this.dateOfBirth = dateOfBirth;
+        this.address = address;
+        this.idCard = idCard;
+        this.phoneNumber = phoneNumber;
+        this.img = img;
+        this.customerType = customerType;
+    }
+
     public Customer(long id, String customer, String dateOfBirth, String address, String idCard, String phoneNumber, String img, CustomerType customerType) {
         this.id = id;
         this.customer = customer;

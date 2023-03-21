@@ -9,10 +9,16 @@ import com.example.applemanagement.service.impl.CustomerTypeService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -26,11 +32,13 @@ public class CustomerController {
     @Autowired
     private CustomerTypeService customerTypeService;
     @GetMapping("")
-    List<Customer> showList() {
-        return customerService.findAll();
+    Page<CustomerDTO> showList(
+                             @PageableDefault(size = 3) Pageable pageable,
+                             @RequestParam(name = "name",required = false, defaultValue = "") String name) {
+        return customerService.findAll(name , pageable);
     }
 
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     Customer showById(@PathVariable int id) {
         return customerService.findById(id);
     }
@@ -48,16 +56,19 @@ public class CustomerController {
         customerService.create(customer);
     }
     @GetMapping("/customerType")
+    @ResponseStatus(HttpStatus.OK)
+
     List<CustomerType> findAllCustomer() {
         return customerTypeService.findAllCustomerType();
     }
 
-    @PostMapping("/{id}")
-    void edit (@RequestBody CustomerDTO customerDTO , int id) {
-        Customer customer = new Customer();
+    @PostMapping ("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    void edit (@RequestBody CustomerDTO customerDTO , @PathVariable int id) {
+        Customer customer = customerService.findById(id);
         BeanUtils.copyProperties(customerDTO,customer);
         customer.setCustomerType(customerTypeService.findById(customer.getCustomerType().getId().intValue()));
-
+        customerService.save(customer);
     }
 
 
