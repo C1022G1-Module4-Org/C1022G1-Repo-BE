@@ -26,7 +26,7 @@ public class RestStoreController {
     @GetMapping("")
     public Page<StoreDTO> storeDTOPage(
             @Valid
-            @PageableDefault(size = 3)Pageable pageable,
+            @PageableDefault(size = 7)Pageable pageable,
             @RequestParam(required = false, defaultValue = "") String name){
         Pageable pageable1 = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize());
         return iStoreService.listAll(pageable1,name);
@@ -61,4 +61,9 @@ public class RestStoreController {
         return storeCreateAndUpdateDTO;
     }
 
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/{id}")
+    public Store storeDetail(@PathVariable int id){
+       return iStoreService.findById(id);
+    }
 }
