@@ -7,15 +7,21 @@ import com.example.applemanagement.service.product.IMadeInService;
 import com.example.applemanagement.service.product.IProductService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/apple/product")
@@ -41,10 +47,14 @@ public class RestProductController {
 
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
-    public Product createNewProduct(@RequestBody ProductDTO productDTO){
+    public ResponseEntity<?> createNewProduct(@Validated @RequestBody ProductDTO productDTO, BindingResult bindingResult){
+        if (bindingResult.hasErrors()){
+            List<String> errors = bindingResult.getFieldErrors().stream().map(DefaultMessageSourceResolvable::getDefaultMessage).collect(Collectors.toList());
+            return ResponseEntity.badRequest().body(errors);
+        }
         Product product = new Product();
         BeanUtils.copyProperties(productDTO,product);
-        return productService.createNewProduct(product);
+        return ResponseEntity.ok(productService.createNewProduct(product));
     }
 
     @DeleteMapping("/{id}")
