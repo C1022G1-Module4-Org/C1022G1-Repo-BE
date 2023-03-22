@@ -2,10 +2,12 @@ package com.example.applemanagement.dto.storeDTO;
 
 import com.example.applemanagement.model.store.Store;
 
+import javax.validation.constraints.NotBlank;
 import java.util.Set;
 
 public class StoreTypeDTO {
     private Integer idType;
+    @NotBlank(message = "{notBlank}")
     private String type;
     private Set<StoreCreateAndUpdateDTO> storeCreateAndUpdateDTOSet;
 
