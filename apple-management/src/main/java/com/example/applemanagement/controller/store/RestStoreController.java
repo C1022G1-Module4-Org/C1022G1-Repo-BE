@@ -89,10 +89,14 @@ public class RestStoreController {
         BeanUtils.copyProperties(store, storeCreateAndUpdateDTO);
         return storeCreateAndUpdateDTO;
     }
-
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping("/{id}")
-    public Store storeDetail(@PathVariable int id){
-       return iStoreService.findById(id);
+    @GetMapping("/details/{id}")
+    public StoreCreateAndUpdateDTO detailsStore(@PathVariable int id){
+        Store store = iStoreService.findById(id);
+        StoreCreateAndUpdateDTO storeCreateAndUpdateDTO = new StoreCreateAndUpdateDTO();
+        storeCreateAndUpdateDTO.setStoreTypeDTO(new StoreTypeDTO());
+        BeanUtils.copyProperties(store.getStoreType(), storeCreateAndUpdateDTO.getStoreTypeDTO());
+        BeanUtils.copyProperties(store, storeCreateAndUpdateDTO);
+        return storeCreateAndUpdateDTO;
     }
 }
