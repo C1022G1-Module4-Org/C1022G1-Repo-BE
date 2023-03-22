@@ -3,6 +3,8 @@ package com.example.applemanagement.dto.employeeDTO;
 import com.example.applemanagement.model.employee.Position;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 @Entity
@@ -11,19 +13,28 @@ public class EmployeeDTO {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Size(max = 45)
+    @NotBlank(message = "Please enter name!")
     @Column(columnDefinition = "varchar(45)")
+    @Pattern(regexp = "^(?!.*\\d)[\\p{Lu}][\\p{Ll}]*([\\s][\\p{Lu}][\\p{Ll}]*)*$|^([\\p{Lu}][\\p{Ll}]*)$", message = "The name needs to match the format. Ex: Nguyen Van A, Nguyễn Văn A")
     private String name;
     private String dateOfBirth;
     @Size(max = 15)
+    @NotBlank(message = "Please enter ID-Card")
+    @Pattern(regexp = "(\\d{9})|(\\d{12})", message = "The Id-Card needs to match the format, Ex:XXXXXXXXX hoặc XXXXXXXXXXXX (X is a number from 0-9, the length of ID card is 9 digits, and the length of CCID is 12 digits.")
     @Column(columnDefinition = "varchar(45)", unique = true)
     private String idCard;
     @Size(max = 15)
+    @NotBlank(message = "Please enter Phone Number")
+    @Pattern(regexp = "^((\\+?84)|0)(9[01]\\d{7})$", message = "The Phone Number needs to match the format Ex: 090xxxxxxx or 091xxxxxxx or +8490xxxxxxx or +8491xxxxxxx.")
     @Column(columnDefinition = "varchar(45)", unique = true)
     private String phoneNumber;
     @Size(max = 45)
+    @NotBlank(message = "Please enter Address")
     @Column(columnDefinition = "varchar(45)")
     private String address;
     @Size(max = 250)
+    @NotBlank(message = "Please enter the path to your portrait photo taken within the last 3 months.")
+    @Pattern(regexp = "^(https?:\\/\\/)?(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{2,256}\\.[a-z]{2,6}\\b([-a-zA-Z0-9@:%_\\+.~#?&//=]*)\\/([\\w\\d-]+)\\.(jpg|png|webm)", message = "Only accept images in .PNG, .JPG, and .Webm formats.")
     @Column(columnDefinition = "varchar(250)")
     private String imgUrl;
     @ManyToOne
@@ -33,9 +44,7 @@ public class EmployeeDTO {
     public EmployeeDTO() {
     }
 
-    public EmployeeDTO(Long id, String name, String dateOfBirth,
-                       String idCard, String phoneNumber, String address,
-                       String imgUrl, Position position) {
+    public EmployeeDTO(Long id, String name, String dateOfBirth, String idCard, String phoneNumber, String address, String imgUrl, Position position) {
         this.id = id;
         this.name = name;
         this.dateOfBirth = dateOfBirth;
@@ -45,6 +54,7 @@ public class EmployeeDTO {
         this.imgUrl = imgUrl;
         this.position = position;
     }
+
     public Long getId() {
         return id;
     }
