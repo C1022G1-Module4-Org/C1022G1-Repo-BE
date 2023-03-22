@@ -15,6 +15,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -33,6 +34,7 @@ public class RestProductController {
     private IMadeInService madeInService;
 
     @GetMapping("")
+    @PreAuthorize("hasRole('ADMIN')")
     public Page<Product> findAllProduct(@PageableDefault(size = 3,sort = "id", direction = Sort.Direction.DESC)Pageable pageable,
                                         @RequestParam(required = false, defaultValue = "") String search){
         Page<Product> products = productService.listAllProduct(search,pageable);
@@ -41,12 +43,14 @@ public class RestProductController {
     }
 
     @GetMapping("/madein")
+    @PreAuthorize("hasRole('ADMIN')")
     public List<MadeIn> findAllMadeIn(){
         return madeInService.findAllMadeIn();
     }
 
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> createNewProduct(@Validated @RequestBody ProductDTO productDTO, BindingResult bindingResult){
         if (bindingResult.hasErrors()){
             List<String> errors = bindingResult.getFieldErrors().stream().map(DefaultMessageSourceResolvable::getDefaultMessage).collect(Collectors.toList());
@@ -58,12 +62,14 @@ public class RestProductController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public void deleteProduct(@PathVariable int id){
         Product product = productService.findProductById(id);
         productService.deleteProduct(product);
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public Product updateProduct(@PathVariable int id, @RequestBody ProductDTO productDTO){
         Product product = new Product();
         BeanUtils.copyProperties(productDTO,product);

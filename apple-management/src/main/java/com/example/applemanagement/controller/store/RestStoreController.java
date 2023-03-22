@@ -13,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
@@ -41,11 +42,13 @@ public class RestStoreController {
 
     @ResponseStatus(HttpStatus.OK)
     @DeleteMapping("/delete/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public void deleteStore(@PathVariable int id){
         iStoreService.delete(id);
     }
 
     @PostMapping("")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> createStore(@Validated @RequestBody StoreCreateAndUpdateDTO storeCreateAndUpdateDTO, BindingResult bindingResult){
         if (!bindingResult.hasErrors()){
             iStoreService.create(storeCreateAndUpdateDTO);
@@ -63,6 +66,7 @@ public class RestStoreController {
     }
 
     @PutMapping("/update/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> updateStore(@Validated @RequestBody StoreCreateAndUpdateDTO storeCreateAndUpdateDTO, BindingResult bindingResult , @PathVariable int id) {
         if (!bindingResult.hasErrors()) {
             iStoreService.update(storeCreateAndUpdateDTO, id);
@@ -81,6 +85,7 @@ public class RestStoreController {
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/detail/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public StoreCreateAndUpdateDTO detailStore(@PathVariable int id){
         Store store = iStoreService.findById(id);
         StoreCreateAndUpdateDTO storeCreateAndUpdateDTO = new StoreCreateAndUpdateDTO();
@@ -91,6 +96,7 @@ public class RestStoreController {
     }
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/details/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public StoreCreateAndUpdateDTO detailsStore(@PathVariable int id){
         Store store = iStoreService.findById(id);
         StoreCreateAndUpdateDTO storeCreateAndUpdateDTO = new StoreCreateAndUpdateDTO();
