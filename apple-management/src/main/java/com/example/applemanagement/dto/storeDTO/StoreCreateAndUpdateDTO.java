@@ -5,13 +5,26 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 
 public class StoreCreateAndUpdateDTO {
     private Integer id;
+    @NotBlank(message = "{notBlank}")
+    @Pattern(regexp = "^[^@;,.=+\\-]+$", message = "{pattern}")
     private String name;
+    @NotBlank(message = "{notBlank}")
+    @Pattern(regexp = "^[^@;,.=+\\-]+$", message = "{pattern}")
     private String address;
+    @NotBlank(message = "{notBlank}")
+    @Pattern(regexp = "^[^@;,.=+\\-]+$", message = "{pattern}")
     private String city;
+    @NotBlank(message = "{notBlank}")
+    @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$", message = "Please fill in the correct format: example123@gmail.com")
     private String email;
+    @NotBlank(message = "{notBlank}")
+    @Pattern(regexp = "^0\\d{9,10}$", message = "Please fill in the correct format: 0-XXXX-XXXXX (X = 0-9)")
+    @Pattern(regexp = "^[^@;,.=+\\-]+$", message = "{pattern}")
     private String phone;
     private StoreTypeDTO storeTypeDTO;
 
