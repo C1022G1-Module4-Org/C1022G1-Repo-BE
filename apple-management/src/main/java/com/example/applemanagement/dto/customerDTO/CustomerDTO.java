@@ -1,22 +1,28 @@
 package com.example.applemanagement.dto.customerDTO;
 
 import com.example.applemanagement.model.customer.CustomerType;
-import com.sun.istack.NotNull;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 public class CustomerDTO implements Validator {
     private long id;
 
+    @Pattern(regexp = "^[A-Za-z]+(?:\\s[A-Za-z]+)*$", message = "Please fill in the correct format: Nguyen Van A")
     private String customer;
+
+    @Pattern(regexp = "^\\d{4}-\\d{2}-\\d{2}$" , message = "Please fill in the correct format: 01/01/2000")
     private String dateOfBirth;
+    @NotBlank
     private String address;
+    @Pattern(regexp = "\\b\\d{12}\\b" , message = "Please fill in the correct format: 004002412585")
     private String idCard;
+    @Pattern(regexp = "^(090|091|\\(84\\)\\+90|\\(84\\)\\+91)[\\d]{7}$", message = "Số điện thoại phải theo dạng 090xxxxxxx hoặc 091xxxxxxx hoặc (84)+90xxxxxxx hoặc (84)+91xxxxxxx")
     private String phoneNumber;
-    private String img;
 
 
     private CustomerType customerType;
@@ -48,13 +54,7 @@ public class CustomerDTO implements Validator {
         this.dateOfBirth = dateOfBirth;
     }
 
-    public String getImg() {
-        return img;
-    }
 
-    public void setImg(String img) {
-        this.img = img;
-    }
 
     public CustomerType getCustomerType() {
         return customerType;
@@ -102,7 +102,6 @@ public class CustomerDTO implements Validator {
         String address = customerDTO.getAddress();
         String idCard = customerDTO.getIdCard();
         String phoneNumber = customerDTO.getPhoneNumber();
-        String img = customerDTO.getImg();;
         CustomerType customerType1 = customerDTO.getCustomerType();
     }
 }

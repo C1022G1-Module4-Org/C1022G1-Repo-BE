@@ -16,10 +16,15 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/customer")
@@ -49,11 +54,26 @@ public class CustomerController {
 
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
-    void create( @RequestBody CustomerDTO customerDTO) {
-        Customer customer = new Customer();
-        BeanUtils.copyProperties(customerDTO,customer);
-        customer.setCustomerType(customerTypeService.findById(customer.getCustomerType().getId().intValue()));
-        customerService.create(customer);
+    ResponseEntity<?> create(@Validated @RequestBody CustomerDTO customerDTO, BindingResult bindingResult) {
+
+        if (!bindingResult.hasErrors()) {
+            Customer customer = new Customer();
+            BeanUtils.copyProperties(customerDTO,customer);
+            customer.setCustomerType(customerTypeService.findById(customer.getCustomerType().getId().intValue()));
+            customerService.create(customer);
+        } else {
+            Map<String, String> map = new LinkedHashMap<>();
+            List<FieldError> errors = bindingResult.getFieldErrors();
+            for (FieldError error : errors) {
+                if (!map.containsKey(error.getField())) {
+                    map.put(error.getField(), error.getDefaultMessage());
+                }
+            }
+            return new ResponseEntity<>(map, HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(HttpStatus.CREATED);
+
+
     }
     @GetMapping("/customerType")
     @ResponseStatus(HttpStatus.OK)
@@ -64,12 +84,26 @@ public class CustomerController {
 
     @PostMapping ("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    void edit (@RequestBody CustomerDTO customerDTO , @PathVariable int id) {
-        Customer customer = customerService.findById(id);
-        BeanUtils.copyProperties(customerDTO,customer);
-        customer.setCustomerType(customerTypeService.findById(customer.getCustomerType().getId().intValue()));
-        customerService.save(customer);
+    ResponseEntity<?> edit ( @Validated @RequestBody CustomerDTO customerDTO , @PathVariable int id, BindingResult bindingResult) {
+
+        if (!bindingResult.hasErrors()) {
+            Customer customer = customerService.findById(id);
+            BeanUtils.copyProperties(customerDTO,customer);
+            customer.setCustomerType(customerTypeService.findById(customer.getCustomerType().getId().intValue()));
+            customerService.save(customer);
+        } else {
+            Map<String, String> map = new LinkedHashMap<>();
+            List<FieldError> errors = bindingResult.getFieldErrors();
+            for (FieldError error : errors) {
+                if (!map.containsKey(error.getField())) {
+                    map.put(error.getField(), error.getDefaultMessage());
+                }
+            }
+            return new ResponseEntity<>(map, HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
     }
 
 
-}
+
