@@ -16,11 +16,14 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
@@ -46,15 +49,21 @@ public class RestProductController {
     }
 
     @PostMapping("")
-    @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<?> createNewProduct(@Validated @RequestBody ProductDTO productDTO, BindingResult bindingResult){
-        if (bindingResult.hasErrors()){
-            List<String> errors = bindingResult.getFieldErrors().stream().map(DefaultMessageSourceResolvable::getDefaultMessage).collect(Collectors.toList());
-            return ResponseEntity.badRequest().body(errors);
+        if (bindingResult.hasErrors()) {
+            Map<String, String> map = new LinkedHashMap<>();
+            List<FieldError> errors = bindingResult.getFieldErrors();
+            for (FieldError error : errors) {
+                if (!map.containsKey(error.getField())) {
+                    map.put(error.getField(), error.getDefaultMessage());
+                }
+                return new ResponseEntity<>(map, HttpStatus.BAD_REQUEST);
+            }
         }
         Product product = new Product();
         BeanUtils.copyProperties(productDTO,product);
-        return ResponseEntity.ok(productService.createNewProduct(product));
+        productService.createNewProduct(product);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")
