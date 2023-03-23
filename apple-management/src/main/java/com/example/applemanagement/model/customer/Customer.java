@@ -1,10 +1,13 @@
 package com.example.applemanagement.model.customer;
 
 
+import com.example.applemanagement.model.billDetail.Bill;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Set;
 
 @Entity
 @Table(name = "customer")
@@ -18,6 +21,9 @@ public class Customer {
     private String address;
     private String idCard;
     private String phoneNumber;
+    @OneToMany(mappedBy = "customerId" , cascade = CascadeType.ALL)
+    @JsonIgnore
+    private Set<Bill> billSet;
 
     @ManyToOne
     @JoinColumn(name = "customerTypeId", referencedColumnName = "id")
@@ -34,6 +40,17 @@ public class Customer {
         this.address = address;
         this.idCard = idCard;
         this.phoneNumber = phoneNumber;
+        this.customerType = customerType;
+    }
+
+    public Customer(long id, String customer, String dateOfBirth, String address, String idCard, String phoneNumber, Set<Bill> billSet, CustomerType customerType) {
+        this.id = id;
+        this.customer = customer;
+        this.dateOfBirth = dateOfBirth;
+        this.address = address;
+        this.idCard = idCard;
+        this.phoneNumber = phoneNumber;
+        this.billSet = billSet;
         this.customerType = customerType;
     }
 
@@ -87,6 +104,14 @@ public class Customer {
 
     public CustomerType getCustomerType() {
         return customerType;
+    }
+
+    public Set<Bill> getBillSet() {
+        return billSet;
+    }
+
+    public void setBillSet(Set<Bill> billSet) {
+        this.billSet = billSet;
     }
 
     public void setCustomerType(CustomerType customerType) {
