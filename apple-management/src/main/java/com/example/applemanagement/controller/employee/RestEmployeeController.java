@@ -7,18 +7,18 @@ import com.example.applemanagement.service.employees.IEmployeeService;
 import com.example.applemanagement.service.employees.position.IPositionService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.data.domain.*;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
+import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/apple/employee")
@@ -44,27 +44,16 @@ public class RestEmployeeController {
         return positionService.findAll();
     }
 
-//    @PostMapping("")
-//    @ResponseStatus(HttpStatus.CREATED)
-//    public Employee createNewEmployee(@RequestBody EmployeeDTO employeeDTO){
-//        Employee employee = new Employee();
-//        BeanUtils.copyProperties(employeeDTO,employee);
-//        return employeeService.createNewEmployee(employee);
-//    }
-
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<?> createNewEmployeeTest(@Validated @RequestBody EmployeeDTO employeeDTO, BindingResult bindingResult){
-        if (bindingResult.hasErrors()) {
-            List<String> errors = bindingResult.getFieldErrors().stream()
-                    .map(DefaultMessageSourceResolvable::getDefaultMessage)
-                    .collect(Collectors.toList());
-            return ResponseEntity.badRequest().body(errors);
+        if (!bindingResult.hasErrors()) {
+            Employee employee = new Employee();
+            BeanUtils.copyProperties(employeeDTO,employee);
+            return ResponseEntity.ok(employeeService.createNewEmployee(employee));
+        } else {
+            return getResponseEntity(bindingResult);
         }
-
-        Employee employee = new Employee();
-        BeanUtils.copyProperties(employeeDTO,employee);
-        return ResponseEntity.ok(employeeService.createNewEmployee(employee));
     }
 
     @ResponseStatus(HttpStatus.OK)
@@ -76,11 +65,34 @@ public class RestEmployeeController {
 
     @ResponseStatus(HttpStatus.OK)
     @PutMapping("/{id}")
-    public Employee updateEmployee(@PathVariable int id, @RequestBody EmployeeDTO employeeDTO){
-        Employee employee = new Employee();
-        BeanUtils.copyProperties(employeeDTO,employee);
-        return employeeService.updateEmployee(id,employee);
+    public ResponseEntity<?> updateEmployee(@Validated @PathVariable int id, @RequestBody EmployeeDTO employeeDTO, BindingResult bindingResult){
+        if (!bindingResult.hasErrors()) {
+            Employee employee = new Employee();
+            BeanUtils.copyProperties(employeeDTO,employee);
+            return ResponseEntity.ok(employeeService.updateEmployee(id,employee));
+        } else {
+            return getResponseEntity(bindingResult);
+        }
     }
+
+    private ResponseEntity<?> getResponseEntity(BindingResult bindingResult) {
+        Map<String, String> map = new LinkedHashMap<>();
+        List<FieldError> errors = bindingResult.getFieldErrors();
+        for (FieldError error : errors) {
+            if (!map.containsKey(error.getField())) {
+                map.put(error.getField(), error.getDefaultMessage());
+            }
+        }
+        return new ResponseEntity<>(map, HttpStatus.BAD_REQUEST);
+    }
+
+//    @ResponseStatus(HttpStatus.OK)
+//    @PutMapping("/{id}")
+//    public Employee updateEmployee(@PathVariable int id, @RequestBody EmployeeDTO employeeDTO){
+//        Employee employee = new Employee();
+//        BeanUtils.copyProperties(employeeDTO,employee);
+//        return employeeService.updateEmployee(id,employee);
+//    }
 }
 
 

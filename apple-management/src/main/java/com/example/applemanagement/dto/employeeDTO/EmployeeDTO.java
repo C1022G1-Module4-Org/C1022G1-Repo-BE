@@ -3,20 +3,18 @@ package com.example.applemanagement.dto.employeeDTO;
 import com.example.applemanagement.model.employee.Position;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 
-@Entity
 public class EmployeeDTO {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     private Long id;
     @Size(max = 45)
     @NotBlank(message = "Please enter name!")
     @Column(columnDefinition = "varchar(45)")
     @Pattern(regexp = "^(?!.*\\d)[\\p{Lu}][\\p{Ll}]*([\\s][\\p{Lu}][\\p{Ll}]*)*$|^([\\p{Lu}][\\p{Ll}]*)$", message = "The name needs to match the format. Ex: Nguyen Van A, Nguyễn Văn A")
     private String name;
+    @Size(max = 10)
+    @NotBlank(message = "Please enter date of birth!")
     private String dateOfBirth;
     @Size(max = 15)
     @NotBlank(message = "Please enter ID-Card")
@@ -25,7 +23,7 @@ public class EmployeeDTO {
     private String idCard;
     @Size(max = 15)
     @NotBlank(message = "Please enter Phone Number")
-    @Pattern(regexp = "^((\\+?84)|0)(9[01]\\d{7})$", message = "The Phone Number needs to match the format Ex: 090xxxxxxx or 091xxxxxxx or +8490xxxxxxx or +8491xxxxxxx.")
+    @Pattern(regexp = "^((\\+?84)|0)(9[012346789]\\d{7})$", message = "The Phone Number needs to match the format Ex: 09Xxxxxxxx or +849Xxxxxxxx {X = 0/1/2/3/4/6/7/8/9}.")
     @Column(columnDefinition = "varchar(45)", unique = true)
     private String phoneNumber;
     @Size(max = 45)

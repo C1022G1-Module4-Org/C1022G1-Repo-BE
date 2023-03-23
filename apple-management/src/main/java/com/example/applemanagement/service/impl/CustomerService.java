@@ -2,10 +2,9 @@ package com.example.applemanagement.service.impl;
 
 
 import com.example.applemanagement.dto.customerDTO.CustomerDTO;
-import com.example.applemanagement.dto.customerDTO.CustomerTypeDTO;
 import com.example.applemanagement.model.customer.Customer;
 import com.example.applemanagement.model.customer.CustomerType;
-import com.example.applemanagement.repository.ICustomerRepository;
+import com.example.applemanagement.repository.customer.ICustomerRepository;
 import com.example.applemanagement.service.ICustomerService;
 import com.example.applemanagement.service.ICustomerTypeService;
 import org.springframework.beans.BeanUtils;
