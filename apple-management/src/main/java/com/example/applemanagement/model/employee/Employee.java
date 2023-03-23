@@ -1,7 +1,11 @@
 package com.example.applemanagement.model.employee;
 
+import com.example.applemanagement.model.billDetail.Bill;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import javax.validation.constraints.Size;
+import java.util.Set;
 
 @Entity
 public class Employee {
@@ -24,9 +28,26 @@ public class Employee {
     @Size(max = 250)
     @Column(columnDefinition = "varchar(250)")
     private String imgUrl;
+    @OneToMany(mappedBy = "employeeId" , cascade = CascadeType.ALL)
+    @JsonIgnore
+    private Set<Bill> billSet;
     @ManyToOne
     @JoinColumn(name = "position_id", referencedColumnName = "id", nullable = false)
     private Position position;
+
+    public Employee(Long id, String name, String dateOfBirth, String idCard, String phoneNumber, String address, String imgUrl, Set<Bill> billSet, Position position) {
+        this.id = id;
+        this.name = name;
+        this.dateOfBirth = dateOfBirth;
+        this.idCard = idCard;
+        this.phoneNumber = phoneNumber;
+        this.address = address;
+        this.imgUrl = imgUrl;
+        this.billSet = billSet;
+        this.position = position;
+    }
+
+
 
     public Employee() {
     }
@@ -100,6 +121,14 @@ public class Employee {
 
     public Position getPosition() {
         return position;
+    }
+
+    public Set<Bill> getBillSet() {
+        return billSet;
+    }
+
+    public void setBillSet(Set<Bill> billSet) {
+        this.billSet = billSet;
     }
 
     public void setPosition(Position position) {

@@ -5,10 +5,8 @@ import com.example.applemanagement.model.employee.Position;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 
-@Entity
 public class EmployeeDTO {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     private Long id;
     @Size(max = 45)
     @NotBlank(message = "Please enter name!")

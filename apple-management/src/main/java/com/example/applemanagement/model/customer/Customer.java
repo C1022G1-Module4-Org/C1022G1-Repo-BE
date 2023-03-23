@@ -1,10 +1,12 @@
 package com.example.applemanagement.model.customer;
 
 
+import com.example.applemanagement.model.billDetail.Bill;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.util.Set;
 
 @Entity
 @Table(name = "customer")
@@ -24,6 +26,12 @@ public class Customer {
     @JoinColumn(name = "customerTypeId", referencedColumnName = "id")
     @JsonManagedReference
     private CustomerType customerType;
+
+
+
+    @OneToMany(mappedBy = "customerId" , cascade = CascadeType.ALL)
+    @JsonIgnore
+    private Set<Bill> billSet;
 
     public Customer() {
     }
@@ -47,6 +55,18 @@ public class Customer {
         this.phoneNumber = phoneNumber;
         this.img = img;
         this.customerType = customerType;
+    }
+
+    public Customer(long id, String customer, String dateOfBirth, String address, String idCard, String phoneNumber, String img, CustomerType customerType, Set<Bill> billSet) {
+        this.id = id;
+        this.customer = customer;
+        this.dateOfBirth = dateOfBirth;
+        this.address = address;
+        this.idCard = idCard;
+        this.phoneNumber = phoneNumber;
+        this.img = img;
+        this.customerType = customerType;
+        this.billSet = billSet;
     }
 
     public long getId() {
@@ -111,5 +131,13 @@ public class Customer {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public Set<Bill> getBillSet() {
+        return billSet;
+    }
+
+    public void setBillSet(Set<Bill> billSet) {
+        this.billSet = billSet;
     }
 }
