@@ -15,6 +15,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
@@ -49,6 +50,8 @@ public class RestProductController {
     }
 
     @PostMapping("")
+    @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> createNewProduct(@Validated @RequestBody ProductDTO productDTO, BindingResult bindingResult){
         if (bindingResult.hasErrors()) {
             Map<String, String> map = new LinkedHashMap<>();
@@ -67,12 +70,14 @@ public class RestProductController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public void deleteProduct(@PathVariable int id){
         Product product = productService.findProductById(id);
         productService.deleteProduct(product);
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public Product updateProduct(@PathVariable int id, @RequestBody ProductDTO productDTO){
         Product product = new Product();
         BeanUtils.copyProperties(productDTO,product);

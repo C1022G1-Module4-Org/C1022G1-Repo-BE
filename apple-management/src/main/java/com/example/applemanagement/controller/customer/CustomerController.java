@@ -15,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -48,62 +49,35 @@ public class CustomerController {
         return customerService.findById(id);
     }
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     void delete(@PathVariable int id) {
          customerService.delete(showById(id));
     }
 
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
-    ResponseEntity<?> create(@Validated @RequestBody CustomerDTO customerDTO, BindingResult bindingResult) {
-
-        if (!bindingResult.hasErrors()) {
-            Customer customer = new Customer();
-            BeanUtils.copyProperties(customerDTO,customer);
-            customer.setCustomerType(customerTypeService.findById(customer.getCustomerType().getId().intValue()));
-            customerService.create(customer);
-        } else {
-            Map<String, String> map = new LinkedHashMap<>();
-            List<FieldError> errors = bindingResult.getFieldErrors();
-            for (FieldError error : errors) {
-                if (!map.containsKey(error.getField())) {
-                    map.put(error.getField(), error.getDefaultMessage());
-                }
-            }
-            return new ResponseEntity<>(map, HttpStatus.BAD_REQUEST);
-        }
-        return new ResponseEntity<>(HttpStatus.CREATED);
-
-
+    @PreAuthorize("hasRole('ADMIN')")
+    void create( @RequestBody CustomerDTO customerDTO) {
+        Customer customer = new Customer();
+        BeanUtils.copyProperties(customerDTO,customer);
+        customer.setCustomerType(customerTypeService.findById(customer.getCustomerType().getId().intValue()));
+        customerService.create(customer);
     }
     @GetMapping("/customerType")
     @ResponseStatus(HttpStatus.OK)
-
     List<CustomerType> findAllCustomer() {
         return customerTypeService.findAllCustomerType();
     }
 
     @PostMapping ("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    ResponseEntity<?> edit ( @Validated @RequestBody CustomerDTO customerDTO , @PathVariable int id, BindingResult bindingResult) {
-
-        if (!bindingResult.hasErrors()) {
-            Customer customer = customerService.findById(id);
-            BeanUtils.copyProperties(customerDTO,customer);
-            customer.setCustomerType(customerTypeService.findById(customer.getCustomerType().getId().intValue()));
-            customerService.save(customer);
-        } else {
-            Map<String, String> map = new LinkedHashMap<>();
-            List<FieldError> errors = bindingResult.getFieldErrors();
-            for (FieldError error : errors) {
-                if (!map.containsKey(error.getField())) {
-                    map.put(error.getField(), error.getDefaultMessage());
-                }
-            }
-            return new ResponseEntity<>(map, HttpStatus.BAD_REQUEST);
-        }
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
+    @PreAuthorize("hasRole('ADMIN')")
+    void edit (@RequestBody CustomerDTO customerDTO , @PathVariable int id) {
+        Customer customer = customerService.findById(id);
+        BeanUtils.copyProperties(customerDTO,customer);
+        customer.setCustomerType(customerTypeService.findById(customer.getCustomerType().getId().intValue()));
+        customerService.save(customer);
     }
 
 
-
+}
