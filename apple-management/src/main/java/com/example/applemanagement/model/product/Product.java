@@ -1,8 +1,10 @@
 package com.example.applemanagement.model.product;
 
+import com.example.applemanagement.model.billDetail.Bill;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 public class Product {
@@ -23,6 +25,12 @@ public class Product {
     @JoinColumn(name = "made_in_id", referencedColumnName = "id")
     @JsonManagedReference
     private MadeIn madeIn;
+
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "bill_detail",
+            joinColumns = {@JoinColumn(name = "product_id", referencedColumnName = "id")},
+            inverseJoinColumns = {@JoinColumn(name = "bill_id", referencedColumnName = "id")})
+    private Set<Bill> billSet;
 
     public Product() {
     }

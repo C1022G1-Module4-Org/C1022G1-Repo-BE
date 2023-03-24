@@ -1,4 +1,4 @@
-package com.example.applemanagement.repository;
+package com.example.applemanagement.repository.customer;
 
 import com.example.applemanagement.model.customer.Customer;
 import org.springframework.data.domain.Page;

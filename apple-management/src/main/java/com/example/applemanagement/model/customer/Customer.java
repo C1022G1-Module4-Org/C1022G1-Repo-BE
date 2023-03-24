@@ -18,7 +18,6 @@ public class Customer {
     private String address;
     private String idCard;
     private String phoneNumber;
-    private String img;
 
     @ManyToOne
     @JoinColumn(name = "customerTypeId", referencedColumnName = "id")
@@ -28,24 +27,13 @@ public class Customer {
     public Customer() {
     }
 
-    public Customer(String customer, String dateOfBirth, String address, String idCard, String phoneNumber, String img, CustomerType customerType) {
-        this.customer = customer;
-        this.dateOfBirth = dateOfBirth;
-        this.address = address;
-        this.idCard = idCard;
-        this.phoneNumber = phoneNumber;
-        this.img = img;
-        this.customerType = customerType;
-    }
-
-    public Customer(long id, String customer, String dateOfBirth, String address, String idCard, String phoneNumber, String img, CustomerType customerType) {
+    public Customer(long id, String customer, String dateOfBirth, String address, String idCard, String phoneNumber, CustomerType customerType) {
         this.id = id;
         this.customer = customer;
         this.dateOfBirth = dateOfBirth;
         this.address = address;
         this.idCard = idCard;
         this.phoneNumber = phoneNumber;
-        this.img = img;
         this.customerType = customerType;
     }
 
@@ -63,22 +51,6 @@ public class Customer {
 
     public void setCustomer(String customer) {
         this.customer = customer;
-    }
-
-    public String getImg() {
-        return img;
-    }
-
-    public void setImg(String img) {
-        this.img = img;
-    }
-
-    public CustomerType getCustomerType() {
-        return customerType;
-    }
-
-    public void setCustomerType(CustomerType customerType) {
-        this.customerType = customerType;
     }
 
     public String getDateOfBirth() {
@@ -111,5 +83,13 @@ public class Customer {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public CustomerType getCustomerType() {
+        return customerType;
+    }
+
+    public void setCustomerType(CustomerType customerType) {
+        this.customerType = customerType;
     }
 }
