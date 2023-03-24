@@ -11,7 +11,7 @@ import org.springframework.data.domain.*;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
+//import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
@@ -46,7 +46,7 @@ public class RestEmployeeController {
     }
 
     @PostMapping("")
-    @PreAuthorize("hasRole('ADMIN')")
+//    @PreAuthorize("hasRole('ADMIN')")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<?> createNewEmployeeTest(@Validated @RequestBody EmployeeDTO employeeDTO, BindingResult bindingResult){
         if (!bindingResult.hasErrors()) {
@@ -60,7 +60,7 @@ public class RestEmployeeController {
 
     @ResponseStatus(HttpStatus.OK)
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+//    @PreAuthorize("hasRole('ADMIN')")
     public void deleteEmployee(@PathVariable long id) {
         Employee employee = this.employeeService.findEmployeeById(id);
         employeeService.deleteEmployee(employee);
@@ -68,7 +68,7 @@ public class RestEmployeeController {
 
     @ResponseStatus(HttpStatus.OK)
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+//    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> updateEmployee( @PathVariable int id,@Validated @RequestBody EmployeeDTO employeeDTO, BindingResult bindingResult){
         if (!bindingResult.hasErrors()) {
             Employee employee = new Employee();

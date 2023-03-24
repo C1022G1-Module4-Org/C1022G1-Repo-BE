@@ -4,7 +4,7 @@ import com.example.applemanagement.dto.storeDTO.StoreTypeDTO;
 import com.example.applemanagement.service.store.IStoreTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.access.prepost.PreAuthorize;
+//import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,7 +18,7 @@ public class RestStoreTypeController {
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("")
-    @PreAuthorize("hasRole('ADMIN')")
+//    @PreAuthorize("hasRole('ADMIN')")
     public List<StoreTypeDTO> listAllType(){
         return iStoreTypeService.listAll();
     }
