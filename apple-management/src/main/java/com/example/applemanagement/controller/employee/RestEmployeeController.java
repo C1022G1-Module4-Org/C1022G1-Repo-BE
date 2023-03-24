@@ -69,7 +69,7 @@ public class RestEmployeeController {
     @ResponseStatus(HttpStatus.OK)
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> updateEmployee(@Validated @PathVariable int id, @RequestBody EmployeeDTO employeeDTO, BindingResult bindingResult){
+    public ResponseEntity<?> updateEmployee( @PathVariable int id,@Validated @RequestBody EmployeeDTO employeeDTO, BindingResult bindingResult){
         if (!bindingResult.hasErrors()) {
             Employee employee = new Employee();
             BeanUtils.copyProperties(employeeDTO,employee);
