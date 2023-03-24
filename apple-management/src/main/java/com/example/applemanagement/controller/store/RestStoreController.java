@@ -85,7 +85,6 @@ public class RestStoreController {
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/detail/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
     public StoreCreateAndUpdateDTO detailStore(@PathVariable int id){
         Store store = iStoreService.findById(id);
         StoreCreateAndUpdateDTO storeCreateAndUpdateDTO = new StoreCreateAndUpdateDTO();
@@ -96,7 +95,6 @@ public class RestStoreController {
     }
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/details/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
     public StoreCreateAndUpdateDTO detailsStore(@PathVariable int id){
         Store store = iStoreService.findById(id);
         StoreCreateAndUpdateDTO storeCreateAndUpdateDTO = new StoreCreateAndUpdateDTO();

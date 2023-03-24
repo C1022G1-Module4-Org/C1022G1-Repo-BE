@@ -32,7 +32,6 @@ public class RestEmployeeController {
     IPositionService  positionService;
 
     @GetMapping("/list-employee")
-    @PreAuthorize("hasRole('ADMIN')")
     public Page<Employee> findAllEmployee(
             @PageableDefault(size = 2,sort = "id", direction = Sort.Direction.DESC)Pageable pageable,
             @RequestParam(required = false, defaultValue = "") String search) {
@@ -42,7 +41,6 @@ public class RestEmployeeController {
     }
 
     @GetMapping("/position")
-    @PreAuthorize("hasRole('ADMIN')")
     public List<Position> findAllPosition(){
         return positionService.findAll();
     }

@@ -37,7 +37,6 @@ public class RestProductController {
     private IMadeInService madeInService;
 
     @GetMapping("")
-    @PreAuthorize("hasRole('ADMIN')")
     public Page<Product> findAllProduct(@PageableDefault(size = 3,sort = "id", direction = Sort.Direction.DESC)Pageable pageable,
                                         @RequestParam(required = false, defaultValue = "") String search){
         Page<Product> products = productService.listAllProduct(search,pageable);
@@ -46,7 +45,6 @@ public class RestProductController {
     }
 
     @GetMapping("/madein")
-    @PreAuthorize("hasRole('ADMIN')")
     public List<MadeIn> findAllMadeIn(){
         return madeInService.findAllMadeIn();
     }
