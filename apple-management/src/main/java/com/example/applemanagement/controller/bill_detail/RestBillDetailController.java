@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @CrossOrigin("*")
-@RequestMapping("/bill")
+@RequestMapping("/billDetail")
 public class RestBillDetailController {
     @Autowired
     private IBillService billService;
